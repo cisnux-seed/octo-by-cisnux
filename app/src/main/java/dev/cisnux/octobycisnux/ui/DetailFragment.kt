@@ -22,14 +22,6 @@ class DetailFragment : Fragment() {
     private val binding: FragmentDetailBinding get() = _binding!!
     private val viewModel: DetailViewModel by viewModels()
 
-    companion object {
-        @StringRes
-        private val TAB_TITLES = intArrayOf(
-            R.string.tab_text_1,
-            R.string.tab_text_2,
-        )
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -80,7 +72,7 @@ class DetailFragment : Fragment() {
             binding.progressBar.visibility = when (it) {
                 is ApplicationNetworkStatus.Failed -> {
                     Toast.makeText(requireActivity(), it.message, Toast.LENGTH_SHORT).show()
-                    View.GONE
+                    View.VISIBLE
                 }
                 is ApplicationNetworkStatus.Success -> View.GONE
                 else -> View.VISIBLE
@@ -91,5 +83,13 @@ class DetailFragment : Fragment() {
     override fun onDestroy() {
         super.onDestroy()
         _binding = null
+    }
+
+    companion object {
+        @StringRes
+        private val TAB_TITLES = intArrayOf(
+            R.string.tab_text_1,
+            R.string.tab_text_2,
+        )
     }
 }

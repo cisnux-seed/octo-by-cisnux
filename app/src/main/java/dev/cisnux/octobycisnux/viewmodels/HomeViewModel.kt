@@ -14,18 +14,12 @@ import kotlinx.coroutines.launch
 class HomeViewModel : ViewModel() {
     private val _users = MutableLiveData<List<User>>()
     val users: LiveData<List<User>> = _users
-
     private val _applicationNetworkStatus = MutableLiveData<ApplicationNetworkStatus>()
     val applicationNetworkStatus = _applicationNetworkStatus
-
     private val repository = UserRepository()
 
     init {
         getUsers()
-    }
-
-    companion object {
-        private val TAG = HomeViewModel::class.java.simpleName.toString()
     }
 
     private fun getUsers() = viewModelScope.launch {
@@ -74,5 +68,9 @@ class HomeViewModel : ViewModel() {
                 _applicationNetworkStatus.value = ApplicationNetworkStatus.Success
             },
         )
+    }
+
+    companion object {
+        private val TAG = HomeViewModel::class.java.simpleName.toString()
     }
 }

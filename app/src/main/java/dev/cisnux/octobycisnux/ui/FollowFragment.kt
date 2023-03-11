@@ -16,16 +16,8 @@ import dev.cisnux.octobycisnux.viewmodels.FollowViewModel
 
 class FollowFragment : Fragment() {
     private val viewModel: FollowViewModel by viewModels()
-
-
-    companion object {
-        const val ARG_USERNAME = "arg_username"
-        const val ARG_POSITION = "arg_position"
-    }
-
     private var position = 1
     private lateinit var username: String
-
     private var _binding: FragmentFollowBinding? = null
     private val binding get() = _binding!!
 
@@ -73,11 +65,16 @@ class FollowFragment : Fragment() {
             binding.progressBar.visibility = when (it) {
                 is ApplicationNetworkStatus.Failed -> {
                     Toast.makeText(requireActivity(), it.message, Toast.LENGTH_SHORT).show()
-                    View.GONE
+                    View.VISIBLE
                 }
                 is ApplicationNetworkStatus.Success -> View.GONE
                 else -> View.VISIBLE
             }
         }
+    }
+
+    companion object {
+        const val ARG_USERNAME = "arg_username"
+        const val ARG_POSITION = "arg_position"
     }
 }

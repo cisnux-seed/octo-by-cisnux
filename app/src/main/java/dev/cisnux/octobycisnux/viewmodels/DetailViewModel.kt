@@ -12,18 +12,11 @@ import dev.cisnux.octobycisnux.utils.ApplicationNetworkStatus
 import kotlinx.coroutines.launch
 
 class DetailViewModel : ViewModel() {
-
     private val _user: MutableLiveData<UserDetail> = MutableLiveData<UserDetail>()
     val user: LiveData<UserDetail> = _user
-
     private val _applicationNetworkStatus = MutableLiveData<ApplicationNetworkStatus>()
     val applicationNetworkStatus = _applicationNetworkStatus
-
     private val repository = UserRepository()
-
-    companion object {
-        private val TAG = DetailViewModel::class.java.simpleName.toString()
-    }
 
     fun getUserByUsername(username: String) = viewModelScope.launch {
         val result = repository.getUserByUsername(username)
@@ -49,5 +42,9 @@ class DetailViewModel : ViewModel() {
                 _applicationNetworkStatus.value = ApplicationNetworkStatus.Success
             }
         )
+    }
+
+    companion object {
+        private val TAG = DetailViewModel::class.java.simpleName.toString()
     }
 }

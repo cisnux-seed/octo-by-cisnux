@@ -23,13 +23,6 @@ class UsersAdapter(inline val onItemClickListener: OnItemClickListener) :
         }
     }
 
-    companion object DiffCallback : DiffUtil.ItemCallback<User>() {
-        override fun areItemsTheSame(oldItem: User, newItem: User): Boolean =
-            oldItem.id == newItem.id
-
-        override fun areContentsTheSame(oldItem: User, newItem: User): Boolean = oldItem == newItem
-    }
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder = ViewHolder(
         ListTileItemBinding.inflate(LayoutInflater.from(parent.context), parent, false),
     )
@@ -40,5 +33,12 @@ class UsersAdapter(inline val onItemClickListener: OnItemClickListener) :
         holder.itemView.setOnClickListener {
              onItemClickListener(user.username)
         }
+    }
+
+    companion object DiffCallback : DiffUtil.ItemCallback<User>() {
+        override fun areItemsTheSame(oldItem: User, newItem: User): Boolean =
+            oldItem.id == newItem.id
+
+        override fun areContentsTheSame(oldItem: User, newItem: User): Boolean = oldItem == newItem
     }
 }

@@ -14,15 +14,9 @@ import kotlinx.coroutines.launch
 class FollowViewModel : ViewModel() {
     private val _userFollows = MutableLiveData<List<User>>()
     val userFollows: LiveData<List<User>> = _userFollows
-
-    private val repository = UserRepository()
-
     private val _applicationNetworkStatus = MutableLiveData<ApplicationNetworkStatus>()
     val applicationNetworkStatus: LiveData<ApplicationNetworkStatus> = _applicationNetworkStatus
-
-    companion object {
-        private val TAG = FollowViewModel::class.java.simpleName.toString()
-    }
+    private val repository = UserRepository()
 
     fun getFollowersOrFollowingByUsername(position: Int, username: String) = viewModelScope.launch {
         _applicationNetworkStatus.value = ApplicationNetworkStatus.Loading
@@ -49,5 +43,9 @@ class FollowViewModel : ViewModel() {
                 _applicationNetworkStatus.value = ApplicationNetworkStatus.Success
             },
         )
+    }
+
+    companion object {
+        private val TAG = FollowViewModel::class.java.simpleName.toString()
     }
 }

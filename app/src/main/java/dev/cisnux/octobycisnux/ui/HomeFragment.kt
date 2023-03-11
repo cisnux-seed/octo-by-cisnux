@@ -67,7 +67,7 @@ class HomeFragment : Fragment() {
             binding.progressBar.visibility = when (it) {
                 is ApplicationNetworkStatus.Failed -> {
                     Toast.makeText(requireActivity(), it.message, Toast.LENGTH_SHORT).show()
-                    View.GONE
+                    View.VISIBLE
                 }
                 is ApplicationNetworkStatus.Success -> View.GONE
                 else -> View.VISIBLE

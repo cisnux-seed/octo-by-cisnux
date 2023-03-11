@@ -10,7 +10,7 @@ import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 
 object UserNetwork {
-    private const val GITHUB_TOKEN = "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"
+    private const val GITHUB_TOKEN = BuildConfig.GITHUB_TOKEN
     private const val BASE_URL = "https://api.github.com"
     private val loggingInterceptor = if (BuildConfig.DEBUG) {
         HttpLoggingInterceptor()
