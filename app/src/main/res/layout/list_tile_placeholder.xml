@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingStart="12dp"
+    android:paddingTop="8dp"
+    android:paddingEnd="12dp"
+    android:paddingBottom="8dp">
+
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/userPictPlaceholder"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:scaleType="fitXY"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:shapeAppearanceOverlay="@style/ProfilePicture" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/usernamePlaceholder"
+        android:layout_width="100dp"
+        android:layout_height="16dp"
+        android:layout_marginStart="8dp"
+        android:backgroundTint="?attr/colorControlHighlight"
+        android:textColor="?attr/colorOnPrimaryContainer"
+        app:layout_constraintBottom_toBottomOf="@+id/userPictPlaceholder"
+        app:layout_constraintStart_toEndOf="@+id/userPictPlaceholder"
+        app:layout_constraintTop_toTopOf="@+id/userPictPlaceholder" />
+</androidx.constraintlayout.widget.ConstraintLayout>
