@@ -9,13 +9,15 @@ import dev.cisnux.octobycisnux.domain.User
 import dev.cisnux.octobycisnux.repository.UserRepository
 import dev.cisnux.octobycisnux.utils.ApplicationErrors
 import dev.cisnux.octobycisnux.utils.ApplicationNetworkStatus
+import dev.cisnux.octobycisnux.utils.SingleEvent
 import kotlinx.coroutines.launch
 
 class HomeViewModel : ViewModel() {
     private val _users = MutableLiveData<List<User>>()
     val users: LiveData<List<User>> = _users
-    private val _applicationNetworkStatus = MutableLiveData<ApplicationNetworkStatus>()
-    val applicationNetworkStatus = _applicationNetworkStatus
+    private val _applicationNetworkStatus = MutableLiveData<SingleEvent<ApplicationNetworkStatus>>()
+    val applicationNetworkStatus: LiveData<SingleEvent<ApplicationNetworkStatus>> =
+        _applicationNetworkStatus
     private val repository = UserRepository()
 
     init {
@@ -23,11 +25,11 @@ class HomeViewModel : ViewModel() {
     }
 
     private fun getUsers() = viewModelScope.launch {
-        _applicationNetworkStatus.value = ApplicationNetworkStatus.Loading
+        _applicationNetworkStatus.value = SingleEvent(ApplicationNetworkStatus.Loading)
         val results = repository.getUsers()
-        results.fold(
-            { error ->
-                _applicationNetworkStatus.value = ApplicationNetworkStatus.Failed(
+        results.fold({ error ->
+            _applicationNetworkStatus.value = SingleEvent(
+                ApplicationNetworkStatus.Failed(
                     when (error) {
                         is ApplicationErrors.IOError -> {
                             "check your connection"
@@ -35,23 +37,22 @@ class HomeViewModel : ViewModel() {
                         else -> null
                     }
                 )
-                error.message?.let {
-                    Log.e(TAG, it)
-                }
-            },
-            { users ->
-                _users.value = users
-                _applicationNetworkStatus.value = ApplicationNetworkStatus.Success
-            },
-        )
+            )
+            error.message?.let {
+                Log.e(TAG, it)
+            }
+        }, { users ->
+            _users.value = users
+            _applicationNetworkStatus.value = SingleEvent(ApplicationNetworkStatus.Success)
+        })
     }
 
     fun getUsersByUsername(username: String) = viewModelScope.launch {
-        _applicationNetworkStatus.value = ApplicationNetworkStatus.Loading
+        _applicationNetworkStatus.value = SingleEvent(ApplicationNetworkStatus.Loading)
         val results = repository.getUsersByUsername(username)
-        results.fold(
-            { error ->
-                _applicationNetworkStatus.value = ApplicationNetworkStatus.Failed(
+        results.fold({ error ->
+            _applicationNetworkStatus.value = SingleEvent(
+                ApplicationNetworkStatus.Failed(
                     when (error) {
                         is ApplicationErrors.IOError -> {
                             "check your connection"
@@ -59,15 +60,14 @@ class HomeViewModel : ViewModel() {
                         else -> null
                     }
                 )
-                error.message?.let {
-                    Log.e(TAG, it)
-                }
-            },
-            { users ->
-                _users.value = users
-                _applicationNetworkStatus.value = ApplicationNetworkStatus.Success
-            },
-        )
+            )
+            error.message?.let {
+                Log.e(TAG, it)
+            }
+        }, { users ->
+            _users.value = users
+            _applicationNetworkStatus.value = SingleEvent(ApplicationNetworkStatus.Success)
+        })
     }
 
     companion object {

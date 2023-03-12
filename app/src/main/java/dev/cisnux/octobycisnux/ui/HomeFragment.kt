@@ -1,6 +1,7 @@
 package dev.cisnux.octobycisnux.ui
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -50,23 +51,31 @@ class HomeFragment : Fragment() {
             userRecyclerView.addItemDecoration(divider)
             userRecyclerView.adapter = adapter
             userRecyclerView.setHasFixedSize(true)
-            searchView.editText.setOnEditorActionListener { _, _, _ ->
-                val query = searchView.text
-                if (query?.isEmpty() != true) {
-                    viewModel.getUsersByUsername(query.toString())
+            searchView
+                .editText
+                .setOnEditorActionListener { _, _, _ ->
+                    val query = searchView.text
+                    Log.d(HomeFragment::class.java.simpleName.toString(), "Called")
+                    if (query?.isNotEmpty() == true) {
+                        viewModel.getUsersByUsername(query.toString())
+                    }
+                    searchBar.text = query
+                    searchView.hide()
+                    false
                 }
-                searchBar.text = query
-                searchView.hide()
-                false
-            }
         }
     }
 
     private fun subscribeProgressRequest() {
         viewModel.applicationNetworkStatus.observe(viewLifecycleOwner) {
-            binding.progressBar.visibility = when (it) {
+            val networkStatus = it.content
+            binding.progressBar.visibility = when (networkStatus) {
                 is ApplicationNetworkStatus.Failed -> {
-                    Toast.makeText(requireActivity(), it.message, Toast.LENGTH_SHORT).show()
+                    // single event for Toast
+                    it.getContentIfNotHandled()?.let { _ ->
+                        Toast.makeText(requireActivity(), networkStatus.message, Toast.LENGTH_SHORT)
+                            .show()
+                    }
                     View.VISIBLE
                 }
                 is ApplicationNetworkStatus.Success -> View.GONE

@@ -9,20 +9,23 @@ import dev.cisnux.octobycisnux.domain.UserDetail
 import dev.cisnux.octobycisnux.repository.UserRepository
 import dev.cisnux.octobycisnux.utils.ApplicationErrors
 import dev.cisnux.octobycisnux.utils.ApplicationNetworkStatus
+import dev.cisnux.octobycisnux.utils.SingleEvent
 import kotlinx.coroutines.launch
 
 class DetailViewModel : ViewModel() {
     private val _user: MutableLiveData<UserDetail> = MutableLiveData<UserDetail>()
     val user: LiveData<UserDetail> = _user
-    private val _applicationNetworkStatus = MutableLiveData<ApplicationNetworkStatus>()
-    val applicationNetworkStatus = _applicationNetworkStatus
+    private val _applicationNetworkStatus = MutableLiveData<SingleEvent<ApplicationNetworkStatus>>()
+    val applicationNetworkStatus: LiveData<SingleEvent<ApplicationNetworkStatus>> =
+        _applicationNetworkStatus
     private val repository = UserRepository()
 
     fun getUserByUsername(username: String) = viewModelScope.launch {
+        _applicationNetworkStatus.value = SingleEvent(ApplicationNetworkStatus.Loading)
         val result = repository.getUserByUsername(username)
-        result.fold(
-            { error ->
-                _applicationNetworkStatus.value = ApplicationNetworkStatus.Failed(
+        result.fold({ error ->
+            _applicationNetworkStatus.value = SingleEvent(
+                ApplicationNetworkStatus.Failed(
                     when (error) {
                         is ApplicationErrors.IOError -> {
                             "check your connection"
@@ -33,15 +36,14 @@ class DetailViewModel : ViewModel() {
                         else -> null
                     }
                 )
-                error.message?.let {
-                    Log.e(TAG, it)
-                }
-            },
-            { userDetail ->
-                _user.value = userDetail
-                _applicationNetworkStatus.value = ApplicationNetworkStatus.Success
+            )
+            error.message?.let {
+                Log.e(TAG, it)
             }
-        )
+        }, { userDetail ->
+            _user.value = userDetail
+            _applicationNetworkStatus.value = SingleEvent(ApplicationNetworkStatus.Success)
+        })
     }
 
     companion object {

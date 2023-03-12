@@ -9,24 +9,25 @@ import androidx.lifecycle.viewModelScope
 import dev.cisnux.octobycisnux.repository.UserRepository
 import dev.cisnux.octobycisnux.utils.ApplicationErrors
 import dev.cisnux.octobycisnux.utils.ApplicationNetworkStatus
+import dev.cisnux.octobycisnux.utils.SingleEvent
 import kotlinx.coroutines.launch
 
 class FollowViewModel : ViewModel() {
     private val _userFollows = MutableLiveData<List<User>>()
     val userFollows: LiveData<List<User>> = _userFollows
-    private val _applicationNetworkStatus = MutableLiveData<ApplicationNetworkStatus>()
-    val applicationNetworkStatus: LiveData<ApplicationNetworkStatus> = _applicationNetworkStatus
+    private val _applicationNetworkStatus = MutableLiveData<SingleEvent<ApplicationNetworkStatus>>()
+    val applicationNetworkStatus: LiveData<SingleEvent<ApplicationNetworkStatus>> =
+        _applicationNetworkStatus
     private val repository = UserRepository()
 
     fun getFollowersOrFollowingByUsername(position: Int, username: String) = viewModelScope.launch {
-        _applicationNetworkStatus.value = ApplicationNetworkStatus.Loading
+        _applicationNetworkStatus.value = SingleEvent(ApplicationNetworkStatus.Loading)
         val results = if (position == 1) repository.getFollowersByUsername(
             username
         ) else repository.getFollowingByUsername(username)
-
-        results.fold(
-            { error ->
-                _applicationNetworkStatus.value = ApplicationNetworkStatus.Failed(
+        results.fold({ error ->
+            _applicationNetworkStatus.value = SingleEvent(
+                ApplicationNetworkStatus.Failed(
                     when (error) {
                         is ApplicationErrors.IOError -> {
                             "check your connection"
@@ -34,15 +35,14 @@ class FollowViewModel : ViewModel() {
                         else -> null
                     }
                 )
-                error.message?.let {
-                    Log.e(TAG, it)
-                }
-            },
-            { followers ->
-                _userFollows.value = followers
-                _applicationNetworkStatus.value = ApplicationNetworkStatus.Success
-            },
-        )
+            )
+            error.message?.let {
+                Log.e(TAG, it)
+            }
+        }, { followers ->
+            _userFollows.value = followers
+            _applicationNetworkStatus.value = SingleEvent(ApplicationNetworkStatus.Success)
+        })
     }
 
     companion object {

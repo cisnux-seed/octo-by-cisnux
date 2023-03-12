@@ -21,6 +21,19 @@ class DetailFragment : Fragment() {
     private var _binding: FragmentDetailBinding? = null
     private val binding: FragmentDetailBinding get() = _binding!!
     private val viewModel: DetailViewModel by viewModels()
+    private lateinit var argUsername: String
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        // get username argument
+        arguments?.let {
+            argUsername = DetailFragmentArgs.fromBundle(it).username
+        }
+        // to avoid making multiple API calls when changing orientation
+        if (savedInstanceState == null) {
+            viewModel.getUserByUsername(argUsername)
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -32,12 +45,8 @@ class DetailFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        // get username argument
-        val argUsername = DetailFragmentArgs.fromBundle(arguments as Bundle).username
-        viewModel.getUserByUsername(argUsername)
         subscribeProgressRequest()
         setUserProfile()
-
         // set up  a view pager and tab layout
         with(binding) {
             topBar.setNavigationOnClickListener {
@@ -69,9 +78,14 @@ class DetailFragment : Fragment() {
 
     private fun subscribeProgressRequest() {
         viewModel.applicationNetworkStatus.observe(viewLifecycleOwner) {
-            binding.progressBar.visibility = when (it) {
+            val networkStatus = it.content
+            binding.progressBar.visibility = when (networkStatus) {
                 is ApplicationNetworkStatus.Failed -> {
-                    Toast.makeText(requireActivity(), it.message, Toast.LENGTH_SHORT).show()
+                    // single event for Toast
+                    it.getContentIfNotHandled()?.let { _ ->
+                        Toast.makeText(requireActivity(), networkStatus.message, Toast.LENGTH_SHORT)
+                            .show()
+                    }
                     View.VISIBLE
                 }
                 is ApplicationNetworkStatus.Success -> View.GONE

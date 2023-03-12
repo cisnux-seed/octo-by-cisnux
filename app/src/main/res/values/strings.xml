@@ -1,6 +1,5 @@
 <resources>
     <string name="app_name">Octo by Cisnux</string>
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="searchbar_hint">Search username</string>
     <string name="followers_placeholder">Followers</string>
     <string name="following_placeholder">Following</string>

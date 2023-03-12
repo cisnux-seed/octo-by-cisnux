@@ -1,11 +1,11 @@
 package dev.cisnux.octobycisnux.ui
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
@@ -21,6 +21,19 @@ class FollowFragment : Fragment() {
     private var _binding: FragmentFollowBinding? = null
     private val binding get() = _binding!!
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        // get position and username arguments
+        arguments?.let {
+            position = it.getInt(ARG_POSITION)
+            username = it.getString(ARG_USERNAME, "")
+        }
+        // to avoid making multiple API calls when changing orientation
+        if (savedInstanceState == null) {
+            viewModel.getFollowersOrFollowingByUsername(position, username)
+        }
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -31,14 +44,7 @@ class FollowFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        // get position and username arguments
-        arguments?.let {
-            position = it.getInt(ARG_POSITION)
-            username = it.getString(ARG_USERNAME, "")
-        }
-        viewModel.getFollowersOrFollowingByUsername(position, username)
         subscribeProgressRequest()
-
         // setup the UsersAdapter
         val adapter = UsersAdapter { username ->
             val toDetailFragment =
@@ -62,15 +68,25 @@ class FollowFragment : Fragment() {
 
     private fun subscribeProgressRequest() {
         viewModel.applicationNetworkStatus.observe(viewLifecycleOwner) {
-            binding.progressBar.visibility = when (it) {
+            val networkStatus = it.content
+            binding.progressBar.visibility = when (networkStatus) {
                 is ApplicationNetworkStatus.Failed -> {
-                    Toast.makeText(requireActivity(), it.message, Toast.LENGTH_SHORT).show()
+                    // single event for Toast
+                    it.getContentIfNotHandled()?.let { _ ->
+                        Toast.makeText(requireActivity(), networkStatus.message, Toast.LENGTH_SHORT)
+                            .show()
+                    }
                     View.VISIBLE
                 }
                 is ApplicationNetworkStatus.Success -> View.GONE
                 else -> View.VISIBLE
             }
         }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        _binding = null
     }
 
     companion object {
