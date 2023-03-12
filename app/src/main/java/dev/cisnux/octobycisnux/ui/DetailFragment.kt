@@ -47,7 +47,7 @@ class DetailFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         subscribeProgressRequest()
         setUserProfile()
-        // set up  a view pager and tab layout
+        // set up a view pager and tab layout
         with(binding) {
             topBar.setNavigationOnClickListener {
                 view.findNavController().navigateUp()
@@ -63,18 +63,17 @@ class DetailFragment : Fragment() {
         }
     }
 
-    private fun setUserProfile() {
-        viewModel.user.observe(viewLifecycleOwner) { userDetail ->
-            with(binding) {
-                username.text = userDetail.username
-                topBar.title = userDetail.name
-                followers.text = userDetail.followers.toString()
-                following.text = userDetail.following.toString()
-                location.text = userDetail.location
-                profilePict.load(userDetail.profilePict)
-            }
+    private fun setUserProfile(): Unit = viewModel.user.observe(viewLifecycleOwner) { userDetail ->
+        with(binding) {
+            username.text = userDetail.username
+            topBar.title = userDetail.name
+            followers.text = userDetail.followers.toString()
+            following.text = userDetail.following.toString()
+            location.text = userDetail.location
+            profilePict.load(userDetail.profilePict)
         }
     }
+
 
     private fun subscribeProgressRequest() {
         viewModel.applicationNetworkStatus.observe(viewLifecycleOwner) {
