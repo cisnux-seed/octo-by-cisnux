@@ -22,7 +22,7 @@ class FollowViewModel : ViewModel() {
 
     fun getFollowersOrFollowingByUsername(position: Int, username: String) = viewModelScope.launch {
         _applicationNetworkStatus.value = SingleEvent(ApplicationNetworkStatus.Loading)
-        val results = if (position == 1) repository.getFollowersByUsername(
+        val results = if (position == 0) repository.getFollowersByUsername(
             username
         ) else repository.getFollowingByUsername(username)
         results.fold({ error ->
@@ -39,9 +39,9 @@ class FollowViewModel : ViewModel() {
             error.message?.let {
                 Log.e(TAG, it)
             }
-        }, { followers ->
-            _userFollows.value = followers
-            _applicationNetworkStatus.value = SingleEvent(ApplicationNetworkStatus.Success())
+        }, { followersOrFollowing ->
+            _userFollows.value = followersOrFollowing
+            _applicationNetworkStatus.value = SingleEvent(ApplicationNetworkStatus.Success(followersOrFollowing.isEmpty()))
         })
     }
 

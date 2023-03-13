@@ -12,7 +12,7 @@
         android:id="@+id/notFoundImage"
         android:layout_width="130dp"
         android:layout_height="130dp"
-        android:contentDescription="@string/not_found"
+        android:importantForAccessibility="no"
         android:visibility="gone"
         app:layout_anchorGravity="center"
         app:srcCompat="@drawable/not_found"
@@ -24,6 +24,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/not_found_title"
+        android:textStyle="bold"
         android:textAlignment="center"
         android:visibility="gone"
         tools:visibility="visible" />

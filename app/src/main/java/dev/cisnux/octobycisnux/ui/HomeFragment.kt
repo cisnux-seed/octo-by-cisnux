@@ -69,7 +69,7 @@ class HomeFragment : Fragment() {
 
     private fun subscribeProgressRequest(): Unit =
         viewModel.applicationNetworkStatus.observe(viewLifecycleOwner) {
-            when (val networkStatus = it.content) {
+            binding.progressBar.visibility = when (val networkStatus = it.content) {
                 is ApplicationNetworkStatus.Failed -> {
                     // single event for Toast
                     it.getContentIfNotHandled()?.let { _ ->
@@ -77,19 +77,19 @@ class HomeFragment : Fragment() {
                             .show()
                     }
                     showNotFoundPlaceholder(View.GONE)
-                    binding.progressBar.visibility = View.VISIBLE
+                    View.VISIBLE
                 }
                 is ApplicationNetworkStatus.Success -> {
-                    binding.progressBar.visibility = View.GONE
                     if (networkStatus.isEmpty)
                         showNotFoundPlaceholder(View.VISIBLE)
                     else
                         showNotFoundPlaceholder(View.GONE)
+                    View.GONE
 
                 }
                 else -> {
                     showNotFoundPlaceholder(View.GONE)
-                    binding.progressBar.visibility = View.VISIBLE
+                    View.VISIBLE
                 }
             }
         }

@@ -8,4 +8,8 @@
     <string name="not_found">the username you are looking for could not be found</string>
     <string name="not_found_title">No results found.</string>
     <string name="not_found_message">Your search returned no results.\nTry shortening or rephrasing your search.</string>
+    <string name="no_followers_title">Followers</string>
+    <string name="no_following_title">People you follow</string>
+    <string name="no_followers_message">You\'ll see all the people who follow you here.</string>
+    <string name="no_following_message">Once you follow people, you\'ll see them here.</string>
 </resources>

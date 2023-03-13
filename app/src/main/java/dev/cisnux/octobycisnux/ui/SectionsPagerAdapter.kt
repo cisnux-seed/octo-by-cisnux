@@ -14,7 +14,7 @@ class SectionsPagerAdapter(activity: AppCompatActivity) : FragmentStateAdapter(a
         val fragment = FollowFragment()
         fragment.arguments = Bundle().apply {
             putString(FollowFragment.ARG_USERNAME, username)
-            putInt(FollowFragment.ARG_POSITION, position + 1)
+            putInt(FollowFragment.ARG_POSITION, position)
         }
         return fragment
     }

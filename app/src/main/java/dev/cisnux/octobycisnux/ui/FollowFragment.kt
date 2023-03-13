@@ -5,18 +5,20 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.annotation.StringRes
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
+import dev.cisnux.octobycisnux.R
 import dev.cisnux.octobycisnux.databinding.FragmentFollowBinding
 import dev.cisnux.octobycisnux.utils.ApplicationNetworkStatus
 import dev.cisnux.octobycisnux.viewmodels.FollowViewModel
 
 class FollowFragment : Fragment() {
     private val viewModel: FollowViewModel by viewModels()
-    private var position = 1
+    private var position = 0
     private lateinit var username: String
     private var _binding: FragmentFollowBinding? = null
     private val binding get() = _binding!!
@@ -66,22 +68,37 @@ class FollowFragment : Fragment() {
         }
     }
 
-    private fun subscribeProgressRequest() {
+    private fun subscribeProgressRequest() =
         viewModel.applicationNetworkStatus.observe(viewLifecycleOwner) {
-            val networkStatus = it.content
-            binding.progressBar.visibility = when (networkStatus) {
+            binding.progressBar.visibility = when (val networkStatus = it.content) {
                 is ApplicationNetworkStatus.Failed -> {
                     // single event for Toast
                     it.getContentIfNotHandled()?.let { _ ->
                         Toast.makeText(requireActivity(), networkStatus.message, Toast.LENGTH_SHORT)
                             .show()
                     }
+                    showNoFollowersOrFollowing(View.GONE)
                     View.VISIBLE
                 }
-                is ApplicationNetworkStatus.Success -> View.GONE
-                else -> View.VISIBLE
+                is ApplicationNetworkStatus.Success -> {
+                    if (networkStatus.isEmpty)
+                        showNoFollowersOrFollowing(View.VISIBLE)
+                    else showNoFollowersOrFollowing(View.GONE)
+                    View.GONE
+                }
+                else -> {
+                    showNoFollowersOrFollowing(View.GONE)
+                    View.VISIBLE
+                }
             }
         }
+
+    private fun showNoFollowersOrFollowing(visibility: Int): Unit = with(binding) {
+        noFollowersIcon.visibility = visibility
+        noFollowersTitle.visibility = visibility
+        noFollowersMessage.visibility = visibility
+        noFollowersTitle.text = getString(FOLLOWERS_OR_FOLLOWING_TITLES[position])
+        noFollowersMessage.text = getString(FOLLOWERS_OR_FOLLOWING_MESSAGES[position])
     }
 
     override fun onDestroy() {
@@ -92,5 +109,17 @@ class FollowFragment : Fragment() {
     companion object {
         const val ARG_USERNAME = "arg_username"
         const val ARG_POSITION = "arg_position"
+
+        @StringRes
+        private val FOLLOWERS_OR_FOLLOWING_TITLES = intArrayOf(
+            R.string.no_followers_title,
+            R.string.no_following_title
+        )
+
+        @StringRes
+        private val FOLLOWERS_OR_FOLLOWING_MESSAGES = intArrayOf(
+            R.string.no_followers_message,
+            R.string.no_following_message
+        )
     }
 }
