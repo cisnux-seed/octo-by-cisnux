@@ -10,24 +10,27 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/userRecyclerView"
-        android:layout_marginHorizontal="@dimen/home_list_horizontal_margin"
-        app:layout_behavior="@string/searchbar_scrolling_view_behavior"
-        android:layout_marginTop="@dimen/appBarRecylerMargin"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_marginHorizontal="@dimen/home_list_horizontal_margin"
+        android:layout_marginTop="@dimen/appBarRecylerMargin"
+        app:layout_behavior="@string/searchbar_scrolling_view_behavior"
+        tools:ignore="PrivateResource"
         tools:itemCount="20"
         tools:listitem="@layout/list_tile_item"
-        tools:visibility="visible"
-        tools:ignore="PrivateResource" />
+        tools:visibility="visible" />
 
     <ProgressBar
         android:id="@+id/progressBar"
-        tools:visibility="gone"
         style="?android:attr/progressBarStyle"
-        android:layout_gravity="center"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        tools:visibility="gone" />
 
+    <include
+        android:id="@+id/notFoundPlaceholder"
+        layout="@layout/not_found_placeholder" />
 
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
@@ -51,8 +54,6 @@
         app:layout_anchor="@id/searchBar">
         <!-- Search suggestions/results go here (ScrollView, RecyclerView, etc.). -->
     </com.google.android.material.search.SearchView>
-
-
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
 

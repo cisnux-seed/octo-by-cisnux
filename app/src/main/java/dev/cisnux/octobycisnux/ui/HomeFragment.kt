@@ -45,12 +45,13 @@ class HomeFragment : Fragment() {
             adapter.submitList(it)
         }
 
-        // add adapter to RecyclerView
         with(binding) {
+            // add adapter to RecyclerView
             userRecyclerView.layoutManager = layoutManager
             userRecyclerView.addItemDecoration(divider)
             userRecyclerView.adapter = adapter
             userRecyclerView.setHasFixedSize(true)
+            // add a listener for SearchView
             searchView
                 .editText
                 .setOnEditorActionListener { _, _, _ ->
@@ -66,23 +67,39 @@ class HomeFragment : Fragment() {
         }
     }
 
-    private fun subscribeProgressRequest() {
+    private fun subscribeProgressRequest(): Unit =
         viewModel.applicationNetworkStatus.observe(viewLifecycleOwner) {
-            val networkStatus = it.content
-            binding.progressBar.visibility = when (networkStatus) {
+            when (val networkStatus = it.content) {
                 is ApplicationNetworkStatus.Failed -> {
                     // single event for Toast
                     it.getContentIfNotHandled()?.let { _ ->
                         Toast.makeText(requireActivity(), networkStatus.message, Toast.LENGTH_SHORT)
                             .show()
                     }
-                    View.VISIBLE
+                    showNotFoundPlaceholder(View.GONE)
+                    binding.progressBar.visibility = View.VISIBLE
                 }
-                is ApplicationNetworkStatus.Success -> View.GONE
-                else -> View.VISIBLE
+                is ApplicationNetworkStatus.Success -> {
+                    binding.progressBar.visibility = View.GONE
+                    if (networkStatus.isEmpty)
+                        showNotFoundPlaceholder(View.VISIBLE)
+                    else
+                        showNotFoundPlaceholder(View.GONE)
+
+                }
+                else -> {
+                    showNotFoundPlaceholder(View.GONE)
+                    binding.progressBar.visibility = View.VISIBLE
+                }
             }
         }
-    }
+
+    private fun showNotFoundPlaceholder(visibility: Int): Unit =
+        with(binding.notFoundPlaceholder) {
+            notFoundImage.visibility = visibility
+            notFoundTitle.visibility = visibility
+            notFoundMessage.visibility = visibility
+        }
 
     override fun onDestroy() {
         super.onDestroy()

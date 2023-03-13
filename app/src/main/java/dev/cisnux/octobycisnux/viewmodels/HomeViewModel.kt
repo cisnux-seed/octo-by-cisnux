@@ -43,7 +43,7 @@ class HomeViewModel : ViewModel() {
             }
         }, { users ->
             _users.value = users
-            _applicationNetworkStatus.value = SingleEvent(ApplicationNetworkStatus.Success)
+            _applicationNetworkStatus.value = SingleEvent(ApplicationNetworkStatus.Success())
         })
     }
 
@@ -66,7 +66,7 @@ class HomeViewModel : ViewModel() {
             }
         }, { users ->
             _users.value = users
-            _applicationNetworkStatus.value = SingleEvent(ApplicationNetworkStatus.Success)
+            _applicationNetworkStatus.value = SingleEvent(ApplicationNetworkStatus.Success(users.isEmpty()))
         })
     }
 

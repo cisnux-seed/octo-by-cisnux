@@ -5,4 +5,7 @@
     <string name="following_placeholder">Following</string>
     <string name="tab_text_1">Followers</string>
     <string name="tab_text_2">Following</string>
+    <string name="not_found">the username you are looking for could not be found</string>
+    <string name="not_found_title">No results found.</string>
+    <string name="not_found_message">Your search returned no results.\nTry shortening or rephrasing your search.</string>
 </resources>

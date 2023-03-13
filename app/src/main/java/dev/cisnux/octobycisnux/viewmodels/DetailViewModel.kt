@@ -42,7 +42,7 @@ class DetailViewModel : ViewModel() {
             }
         }, { userDetail ->
             _user.value = userDetail
-            _applicationNetworkStatus.value = SingleEvent(ApplicationNetworkStatus.Success)
+            _applicationNetworkStatus.value = SingleEvent(ApplicationNetworkStatus.Success())
         })
     }
 

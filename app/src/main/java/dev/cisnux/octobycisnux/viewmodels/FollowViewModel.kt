@@ -41,7 +41,7 @@ class FollowViewModel : ViewModel() {
             }
         }, { followers ->
             _userFollows.value = followers
-            _applicationNetworkStatus.value = SingleEvent(ApplicationNetworkStatus.Success)
+            _applicationNetworkStatus.value = SingleEvent(ApplicationNetworkStatus.Success())
         })
     }
 
