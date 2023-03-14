@@ -4,4 +4,5 @@
     <dimen name="profile_caption_divider">4dp</dimen>
     <dimen name="home_list_horizontal_margin">16dp</dimen>
     <dimen name="home_profile_pict_size">90dp</dimen>
+    <dimen name="tab_margin_top">8dp</dimen>
 </resources>

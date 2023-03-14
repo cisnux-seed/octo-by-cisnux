@@ -23,12 +23,12 @@
         style="@style/TextAppearance.Material3.TitleMedium"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="?attr/colorOnBackground"
         android:layout_marginBottom="@dimen/profile_caption_divider"
         android:text="@string/followers_placeholder"
+        android:textColor="?attr/colorOnBackground"
         app:layout_constraintBottom_toTopOf="@+id/followers"
-        app:layout_constraintEnd_toEndOf="@+id/view_pager"
-        app:layout_constraintStart_toStartOf="@+id/view_pager" />
+        app:layout_constraintEnd_toEndOf="@+id/viewPager"
+        app:layout_constraintStart_toStartOf="@+id/viewPager" />
 
     <TextView
         android:id="@+id/followingPlaceholder"
@@ -37,7 +37,7 @@
         android:layout_height="wrap_content"
         android:text="@string/following_placeholder"
         android:textColor="?attr/colorOnBackground"
-        app:layout_constraintEnd_toEndOf="@+id/view_pager"
+        app:layout_constraintEnd_toEndOf="@+id/viewPager"
         app:layout_constraintStart_toEndOf="@+id/followerPlaceholder"
         app:layout_constraintTop_toTopOf="@+id/followerPlaceholder" />
 
@@ -47,8 +47,8 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:maxLines="1"
-        android:textColor="?attr/colorOnBackground"
         android:textAlignment="center"
+        android:textColor="?attr/colorOnBackground"
         app:layout_constraintBottom_toBottomOf="@+id/profilePict"
         app:layout_constraintEnd_toEndOf="@+id/followerPlaceholder"
         app:layout_constraintStart_toStartOf="@+id/followerPlaceholder"
@@ -61,8 +61,8 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:maxLines="1"
-        android:textColor="?attr/colorOnBackground"
         android:textAlignment="center"
+        android:textColor="?attr/colorOnBackground"
         app:layout_constraintEnd_toEndOf="@+id/followingPlaceholder"
         app:layout_constraintStart_toStartOf="@+id/followingPlaceholder"
         app:layout_constraintTop_toTopOf="@+id/followers"
@@ -75,10 +75,10 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/profile_caption_divider"
         android:maxLines="1"
-        android:textColor="?attr/colorOnBackground"
         android:textAlignment="center"
+        android:textColor="?attr/colorOnBackground"
         app:layout_constraintEnd_toEndOf="@+id/location"
-        app:layout_constraintStart_toStartOf="@+id/tabs"
+        app:layout_constraintStart_toStartOf="@+id/location"
         app:layout_constraintTop_toBottomOf="@+id/profilePict"
         tools:text="cisnux-seed" />
 
@@ -88,12 +88,11 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/profile_caption_divider"
-        android:layout_marginEnd="16dp"
         android:maxLines="1"
-        android:textColor="?attr/colorOnBackground"
         android:textAlignment="center"
+        android:textColor="?attr/colorOnBackground"
         app:layout_constraintEnd_toStartOf="@+id/followers"
-        app:layout_constraintStart_toStartOf="@+id/tabs"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/username"
         tools:text="Jakarta, Indonesia" />
 
@@ -115,34 +114,34 @@
         android:id="@+id/tabs"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="@dimen/tab_margin_top"
         android:background="?android:attr/colorBackground"
         android:importantForAccessibility="no"
-        app:layout_constraintEnd_toEndOf="@+id/view_pager"
-        app:layout_constraintStart_toStartOf="@+id/view_pager"
+        app:layout_constraintEnd_toEndOf="@+id/viewPager"
+        app:layout_constraintStart_toStartOf="@+id/viewPager"
         app:layout_constraintTop_toBottomOf="@+id/location"
         app:tabRippleColor="?android:attr/colorBackground"
         app:tabTextColor="?attr/colorOnBackground" />
 
     <androidx.viewpager2.widget.ViewPager2
-        android:id="@+id/view_pager"
+        android:id="@+id/viewPager"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="@dimen/tab_margin_top"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tabs" />
 
     <ProgressBar
-        android:layout_gravity="center"
         android:id="@+id/progressBar"
         style="?android:attr/progressBarStyle"
         android:layout_width="wrap_content"
-        tools:visibility="gone"
         android:layout_height="wrap_content"
+        android:layout_gravity="center"
         app:layout_constraintBottom_toTopOf="@+id/tabs"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/followerPlaceholder" />
+        app:layout_constraintTop_toTopOf="@+id/followerPlaceholder"
+        tools:visibility="gone" />
 </androidx.constraintlayout.widget.ConstraintLayout>
