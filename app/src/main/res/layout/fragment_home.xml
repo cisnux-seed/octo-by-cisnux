@@ -8,12 +8,6 @@
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintTop_toTopOf="parent">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-        
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/userRecyclerView"
         android:layout_width="match_parent"
@@ -58,9 +52,7 @@
         android:layout_height="match_parent"
         android:hint="@string/searchbar_hint"
         android:importantForAccessibility="no"
-        app:layout_anchor="@id/searchBar">
-        <!-- Search suggestions/results go here (ScrollView, RecyclerView, etc.). -->
-    </com.google.android.material.search.SearchView>
+        app:layout_anchor="@id/searchBar"/>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
