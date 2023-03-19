@@ -8,65 +8,15 @@
 
     <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/profilePict"
-        android:layout_width="@dimen/home_profile_pict_size"
-        android:layout_height="@dimen/home_profile_pict_size"
+        android:layout_width="@dimen/detail_profile_pict_size"
+        android:layout_height="@dimen/detail_profile_pict_size"
+        android:layout_marginStart="24dp"
         android:layout_marginTop="16dp"
         android:scaleType="fitXY"
-        app:layout_constraintEnd_toEndOf="@+id/username"
-        app:layout_constraintStart_toStartOf="@+id/username"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/topBar"
         app:shapeAppearanceOverlay="@style/ProfilePicture"
         tools:src="@tools:sample/avatars" />
-
-    <TextView
-        android:id="@+id/followerPlaceholder"
-        style="@style/TextAppearance.Material3.TitleMedium"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/profile_caption_divider"
-        android:text="@string/followers_placeholder"
-        android:textColor="?attr/colorOnBackground"
-        app:layout_constraintBottom_toTopOf="@+id/followers"
-        app:layout_constraintEnd_toEndOf="@+id/viewPager"
-        app:layout_constraintStart_toStartOf="@+id/viewPager" />
-
-    <TextView
-        android:id="@+id/followingPlaceholder"
-        style="@style/TextAppearance.Material3.TitleMedium"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/following_placeholder"
-        android:textColor="?attr/colorOnBackground"
-        app:layout_constraintEnd_toEndOf="@+id/viewPager"
-        app:layout_constraintStart_toEndOf="@+id/followerPlaceholder"
-        app:layout_constraintTop_toTopOf="@+id/followerPlaceholder" />
-
-    <TextView
-        android:id="@+id/followers"
-        style="@style/TextAppearance.Material3.TitleSmall"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:maxLines="1"
-        android:textAlignment="center"
-        android:textColor="?attr/colorOnBackground"
-        app:layout_constraintBottom_toBottomOf="@+id/profilePict"
-        app:layout_constraintEnd_toEndOf="@+id/followerPlaceholder"
-        app:layout_constraintStart_toStartOf="@+id/followerPlaceholder"
-        app:layout_constraintTop_toTopOf="@+id/profilePict"
-        tools:text="1000" />
-
-    <TextView
-        android:id="@+id/following"
-        style="@style/TextAppearance.Material3.TitleSmall"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:maxLines="1"
-        android:textAlignment="center"
-        android:textColor="?attr/colorOnBackground"
-        app:layout_constraintEnd_toEndOf="@+id/followingPlaceholder"
-        app:layout_constraintStart_toStartOf="@+id/followingPlaceholder"
-        app:layout_constraintTop_toTopOf="@+id/followers"
-        tools:text="968" />
 
     <TextView
         android:id="@+id/username"
@@ -77,22 +27,22 @@
         android:maxLines="1"
         android:textAlignment="center"
         android:textColor="?attr/colorOnBackground"
-        app:layout_constraintEnd_toEndOf="@+id/location"
-        app:layout_constraintStart_toStartOf="@+id/location"
+        app:layout_constraintEnd_toEndOf="@+id/profilePict"
+        app:layout_constraintStart_toStartOf="@+id/profilePict"
         app:layout_constraintTop_toBottomOf="@+id/profilePict"
         tools:text="cisnux-seed" />
 
     <TextView
         android:id="@+id/location"
         style="@style/TextAppearance.Material3.BodySmall"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/profile_caption_divider"
         android:maxLines="1"
         android:textAlignment="center"
+        android:layout_marginTop="@dimen/profile_caption_divider"
         android:textColor="?attr/colorOnBackground"
-        app:layout_constraintEnd_toStartOf="@+id/followers"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/username"
+        app:layout_constraintStart_toStartOf="@+id/username"
         app:layout_constraintTop_toBottomOf="@+id/username"
         tools:text="Jakarta, Indonesia" />
 
@@ -144,4 +94,62 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/followerPlaceholder"
         tools:visibility="gone" />
+
+    <TextView
+        android:id="@+id/followerPlaceholder"
+        style="@style/TextAppearance.Material3.TitleMedium"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="@string/followers_placeholder"
+        android:textAlignment="center"
+        android:textColor="?attr/colorOnBackground"
+        app:layout_constraintHorizontal_weight="1"
+        app:layout_constraintVertical_weight="1" />
+
+    <TextView
+        android:id="@+id/followingPlaceholder"
+        style="@style/TextAppearance.Material3.TitleMedium"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="@string/following_placeholder"
+        android:textAlignment="center"
+        android:textColor="?attr/colorOnBackground"
+        app:layout_constraintHorizontal_weight="1"
+        app:layout_constraintVertical_weight="1" />
+
+    <TextView
+        android:id="@+id/followers"
+        style="@style/TextAppearance.Material3.TitleSmall"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:maxLines="1"
+        android:textAlignment="center"
+        android:textColor="?attr/colorOnBackground"
+        app:layout_constraintHorizontal_weight="1"
+        app:layout_constraintVertical_weight="1"
+        tools:text="1000" />
+
+    <TextView
+        android:id="@+id/following"
+        style="@style/TextAppearance.Material3.TitleSmall"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:maxLines="1"
+        android:textAlignment="center"
+        android:textColor="?attr/colorOnBackground"
+        app:layout_constraintHorizontal_weight="1"
+        app:layout_constraintVertical_weight="1"
+        tools:text="968" />
+
+    <androidx.constraintlayout.helper.widget.Flow
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:constraint_referenced_ids="followerPlaceholder,followingPlaceholder,followers,following"
+        app:flow_maxElementsWrap="2"
+        app:flow_wrapMode="aligned"
+        app:flow_verticalGap="@dimen/profile_caption_divider"
+        app:layout_constraintBottom_toBottomOf="@+id/profilePict"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/profilePict"
+        app:layout_constraintTop_toBottomOf="@+id/topBar" />
 </androidx.constraintlayout.widget.ConstraintLayout>

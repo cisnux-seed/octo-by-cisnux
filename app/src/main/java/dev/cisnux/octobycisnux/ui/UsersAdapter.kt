@@ -10,7 +10,7 @@ import dev.cisnux.octobycisnux.databinding.ListTileItemBinding
 import dev.cisnux.octobycisnux.domain.User
 import dev.cisnux.octobycisnux.utils.OnItemClickListener
 
-class UsersAdapter(inline val onItemClickListener: OnItemClickListener<String>) :
+class UsersAdapter(private inline val onItemClickListener: OnItemClickListener<String>) :
     ListAdapter<User, UsersAdapter.ViewHolder>(DiffCallback) {
 
     class ViewHolder(private val binding: ListTileItemBinding) :
