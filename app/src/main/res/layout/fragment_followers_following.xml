@@ -14,7 +14,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:context=".ui.FollowFragment"
+        tools:context=".ui.FollowersFollowingFragment"
         tools:itemCount="20"
         tools:listitem="@layout/list_tile_item" />
 
@@ -31,7 +31,7 @@
         tools:visibility="gone" />
 
     <ImageView
-        android:id="@+id/noFollowersIcon"
+        android:id="@+id/noFollowersFollowingIcon"
         android:layout_width="@dimen/detail_profile_pict_size"
         android:layout_height="@dimen/detail_profile_pict_size"
         android:importantForAccessibility="no"
@@ -43,7 +43,7 @@
         app:srcCompat="@drawable/followers_following_icon" />
 
     <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/noFollowersTitle"
+        android:id="@+id/noFollowersFollowingTitle"
         style="@style/TextAppearance.Material3.LabelMedium"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -52,13 +52,13 @@
         android:textColor="?attr/colorOnBackground"
         android:textStyle="bold"
         android:visibility="gone"
-        app:layout_constraintEnd_toEndOf="@id/noFollowersIcon"
-        app:layout_constraintStart_toStartOf="@id/noFollowersIcon"
-        app:layout_constraintTop_toBottomOf="@id/noFollowersIcon"
+        app:layout_constraintEnd_toEndOf="@id/noFollowersFollowingIcon"
+        app:layout_constraintStart_toStartOf="@id/noFollowersFollowingIcon"
+        app:layout_constraintTop_toBottomOf="@id/noFollowersFollowingIcon"
         tools:text="@string/no_followers_title" />
 
     <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/noFollowersMessage"
+        android:id="@+id/noFollowersFollowingMessage"
         style="@style/TextAppearance.Material3.LabelSmall"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -66,9 +66,9 @@
         android:textAlignment="center"
         android:textColor="?attr/colorOnBackground"
         android:visibility="gone"
-        app:layout_constraintEnd_toEndOf="@id/noFollowersTitle"
-        app:layout_constraintStart_toStartOf="@id/noFollowersTitle"
-        app:layout_constraintTop_toBottomOf="@id/noFollowersTitle"
+        app:layout_constraintEnd_toEndOf="@id/noFollowersFollowingTitle"
+        app:layout_constraintStart_toStartOf="@id/noFollowersFollowingTitle"
+        app:layout_constraintTop_toBottomOf="@id/noFollowersFollowingTitle"
         tools:text="@string/no_followers_message" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

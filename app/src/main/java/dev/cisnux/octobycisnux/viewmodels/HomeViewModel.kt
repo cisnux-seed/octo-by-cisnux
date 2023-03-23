@@ -1,76 +1,48 @@
 package dev.cisnux.octobycisnux.viewmodels
 
 import android.util.Log
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
+import dagger.hilt.android.lifecycle.HiltViewModel
 import dev.cisnux.octobycisnux.domain.User
 import dev.cisnux.octobycisnux.repository.UserRepository
-import dev.cisnux.octobycisnux.utils.ApplicationErrors
-import dev.cisnux.octobycisnux.utils.ApplicationNetworkStatus
+import dev.cisnux.octobycisnux.utils.ApplicationStates
 import dev.cisnux.octobycisnux.utils.SingleEvent
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class HomeViewModel : ViewModel() {
-    private val _users = MutableLiveData<List<User>>()
-    val users: LiveData<List<User>> = _users
-    private val _applicationNetworkStatus = MutableLiveData<SingleEvent<ApplicationNetworkStatus>>()
-    val applicationNetworkStatus: LiveData<SingleEvent<ApplicationNetworkStatus>> =
-        _applicationNetworkStatus
-    private val repository = UserRepository()
+@HiltViewModel
+class HomeViewModel @Inject constructor(private val repository: UserRepository) : ViewModel() {
+    private val _users = MediatorLiveData<List<User>>()
+    val users: LiveData<List<User>> get() = _users
+    private val _usersStates = MutableLiveData<SingleEvent<ApplicationStates>>()
+    val usersStates: LiveData<SingleEvent<ApplicationStates>> get() = _usersStates
+    val hasFocus: MutableLiveData<Boolean> = MutableLiveData<Boolean>()
 
     init {
-        getUsers()
-    }
-
-    private fun getUsers() = viewModelScope.launch {
-        _applicationNetworkStatus.value = SingleEvent(ApplicationNetworkStatus.Loading)
-        val results = repository.getUsers()
-        results.fold({ error ->
-            _applicationNetworkStatus.value = SingleEvent(
-                ApplicationNetworkStatus.Failed(
-                    when (error) {
-                        is ApplicationErrors.IOError -> {
-                            "check your connection"
-                        }
-                        else -> null
-                    }
-                )
-            )
-            error.message?.let {
-                Log.e(TAG, it)
-            }
-        }, { users ->
-            _users.value = users
-            _applicationNetworkStatus.value = SingleEvent(ApplicationNetworkStatus.Success())
-        })
+        refreshLocalUsers()
+        _users.addSource(repository.users.asLiveData()) {
+            _users.value = it
+        }
     }
 
     fun getUsersByUsername(username: String) = viewModelScope.launch {
-        _applicationNetworkStatus.value = SingleEvent(ApplicationNetworkStatus.Loading)
+        _usersStates.value = SingleEvent(ApplicationStates.Loading)
         val results = repository.getUsersByUsername(username)
-        results.fold({ error ->
-            _applicationNetworkStatus.value = SingleEvent(
-                ApplicationNetworkStatus.Failed(
-                    when (error) {
-                        is ApplicationErrors.IOError -> {
-                            "check your connection"
-                        }
-                        else -> null
-                    }
-                )
-            )
-            error.message?.let {
-                Log.e(TAG, it)
-            }
+        results.fold({ applicationErrors ->
+            _usersStates.value =
+                applicationErrors?.let { SingleEvent(ApplicationStates.Failed(it)) }
         }, { users ->
             _users.value = users
-            _applicationNetworkStatus.value = SingleEvent(ApplicationNetworkStatus.Success(users.isEmpty()))
+            _usersStates.value = SingleEvent(ApplicationStates.Success)
         })
     }
 
-    companion object {
-        private val TAG = HomeViewModel::class.java.simpleName.toString()
+    private fun refreshLocalUsers() = viewModelScope.launch {
+        Log.d(HomeViewModel::class.java.simpleName, "refreshLocalUsers")
+        _usersStates.value = SingleEvent(ApplicationStates.Loading)
+        val results = repository.refreshLocalUsers()
+        _usersStates.value = SingleEvent(
+            results?.let { ApplicationStates.Failed(it) }
+                ?: ApplicationStates.Success)
     }
 }

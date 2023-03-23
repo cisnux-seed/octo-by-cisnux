@@ -1,23 +1,15 @@
 package dev.cisnux.octobycisnux.utils
 
-sealed class ApplicationErrors(val message: String? = null) {
+sealed class ApplicationErrors(val message: String) {
     class IOError(
-        message: String?,
-    ) : ApplicationErrors(message)
-
-    class AuthenticationError(
-        message: String?,
+        message: String = "check your connection",
     ) : ApplicationErrors(message)
 
     class NotFoundError(
-        message: String?,
-    ) : ApplicationErrors(message)
-
-    class AuthorizationError(
-        message: String?,
+        message: String = "the username you're looking for could not be found",
     ) : ApplicationErrors(message)
 
     class ServerError(
-        message: String?,
+        message: String = "the server undergoing maintenance",
     ) : ApplicationErrors(message)
 }

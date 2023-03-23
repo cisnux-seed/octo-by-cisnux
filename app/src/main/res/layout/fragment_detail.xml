@@ -6,6 +6,19 @@
     android:layout_height="match_parent"
     tools:context=".ui.DetailFragment">
 
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/toolbar"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:minHeight="?attr/actionBarSize"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:navigationIcon="@drawable/ic_arrow_back_24dp"
+        app:navigationIconTint="?attr/colorOnBackground"
+        app:titleTextColor="?attr/colorOnBackground"
+        tools:title="John Doe" />
+
     <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/profilePict"
         android:layout_width="@dimen/detail_profile_pict_size"
@@ -14,7 +27,7 @@
         android:layout_marginTop="16dp"
         android:scaleType="fitXY"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/topBar"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar"
         app:shapeAppearanceOverlay="@style/ProfilePicture"
         tools:src="@tools:sample/avatars" />
 
@@ -35,30 +48,16 @@
     <TextView
         android:id="@+id/location"
         style="@style/TextAppearance.Material3.BodySmall"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:maxLines="1"
-        android:textAlignment="center"
         android:layout_marginTop="@dimen/profile_caption_divider"
+        android:maxLines="2"
+        android:textAlignment="center"
         android:textColor="?attr/colorOnBackground"
         app:layout_constraintEnd_toEndOf="@+id/username"
         app:layout_constraintStart_toStartOf="@+id/username"
         app:layout_constraintTop_toBottomOf="@+id/username"
         tools:text="Jakarta, Indonesia" />
-
-    <com.google.android.material.appbar.MaterialToolbar
-        android:id="@+id/topBar"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:background="?attr/colorPrimary"
-        android:minHeight="?attr/actionBarSize"
-        android:theme="?attr/actionBarTheme"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:navigationIcon="@drawable/baseline_arrow_back_24"
-        app:navigationIconTint="?attr/colorOnSurfaceInverse"
-        app:titleTextColor="?attr/colorOnSurfaceInverse" />
 
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/tabs"
@@ -67,6 +66,7 @@
         android:layout_marginTop="@dimen/tab_margin_top"
         android:background="?android:attr/colorBackground"
         android:importantForAccessibility="no"
+        android:theme="?attr/actionBarTheme"
         app:layout_constraintEnd_toEndOf="@+id/viewPager"
         app:layout_constraintStart_toStartOf="@+id/viewPager"
         app:layout_constraintTop_toBottomOf="@+id/location"
@@ -115,6 +115,7 @@
         android:textAlignment="center"
         android:textColor="?attr/colorOnBackground"
         app:layout_constraintHorizontal_weight="1"
+        app:layout_constraintStart_toEndOf="@+id/followerPlaceholder"
         app:layout_constraintVertical_weight="1" />
 
     <TextView
@@ -142,14 +143,27 @@
         tools:text="968" />
 
     <androidx.constraintlayout.helper.widget.Flow
+        android:id="@+id/container"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         app:constraint_referenced_ids="followerPlaceholder,followingPlaceholder,followers,following"
         app:flow_maxElementsWrap="2"
-        app:flow_wrapMode="aligned"
         app:flow_verticalGap="@dimen/profile_caption_divider"
+        app:flow_wrapMode="aligned"
         app:layout_constraintBottom_toBottomOf="@+id/profilePict"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/profilePict"
-        app:layout_constraintTop_toBottomOf="@+id/topBar" />
+        app:layout_constraintTop_toBottomOf="@+id/toolbar" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fabFavoriteUser"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:contentDescription="@string/add_to_favorite_users"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:src="@drawable/ic_favorite_border_24dp" />
 </androidx.constraintlayout.widget.ConstraintLayout>
+
+

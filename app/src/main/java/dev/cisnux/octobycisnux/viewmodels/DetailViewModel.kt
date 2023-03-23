@@ -1,52 +1,38 @@
 package dev.cisnux.octobycisnux.viewmodels
 
-import android.util.Log
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
+import dagger.hilt.android.lifecycle.HiltViewModel
 import dev.cisnux.octobycisnux.domain.UserDetail
 import dev.cisnux.octobycisnux.repository.UserRepository
-import dev.cisnux.octobycisnux.utils.ApplicationErrors
-import dev.cisnux.octobycisnux.utils.ApplicationNetworkStatus
+import dev.cisnux.octobycisnux.utils.ApplicationStates
 import dev.cisnux.octobycisnux.utils.SingleEvent
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class DetailViewModel : ViewModel() {
-    private val _user: MutableLiveData<UserDetail> = MutableLiveData<UserDetail>()
-    val user: LiveData<UserDetail> = _user
-    private val _applicationNetworkStatus = MutableLiveData<SingleEvent<ApplicationNetworkStatus>>()
-    val applicationNetworkStatus: LiveData<SingleEvent<ApplicationNetworkStatus>> =
-        _applicationNetworkStatus
-    private val repository = UserRepository()
+@HiltViewModel
+class DetailViewModel @Inject constructor(private val repository: UserRepository) : ViewModel() {
+    private val _userDetail = MutableLiveData<UserDetail>()
+    val userDetail: LiveData<UserDetail> get() = _userDetail
+    private val _userDetailStates = MutableLiveData<SingleEvent<ApplicationStates>>()
+    val userDetailStates: LiveData<SingleEvent<ApplicationStates>> get() = _userDetailStates
 
-    fun getUserByUsername(username: String) = viewModelScope.launch {
-        _applicationNetworkStatus.value = SingleEvent(ApplicationNetworkStatus.Loading)
-        val result = repository.getUserByUsername(username)
-        result.fold({ error ->
-            _applicationNetworkStatus.value = SingleEvent(
-                ApplicationNetworkStatus.Failed(
-                    when (error) {
-                        is ApplicationErrors.IOError -> {
-                            "check your connection"
-                        }
-                        is ApplicationErrors.NotFoundError -> {
-                            "the username you're looking for could not be found"
-                        }
-                        else -> null
-                    }
-                )
-            )
-            error.message?.let {
-                Log.e(TAG, it)
+    fun getUserDetailByUsername(username: String) = viewModelScope.launch {
+        _userDetailStates.value = SingleEvent(ApplicationStates.Loading)
+        val results = repository.getUserDetailByUsername(username)
+        results.fold({ applicationErrors ->
+            applicationErrors?.let {
+                _userDetailStates.value = SingleEvent(ApplicationStates.Failed(it))
             }
         }, { userDetail ->
-            _user.value = userDetail
-            _applicationNetworkStatus.value = SingleEvent(ApplicationNetworkStatus.Success())
+            _userDetailStates.value = SingleEvent(ApplicationStates.Success)
+            _userDetail.value = userDetail
         })
     }
 
-    companion object {
-        private val TAG = DetailViewModel::class.java.simpleName.toString()
-    }
+    fun isFavoriteUser(id: Int): LiveData<Boolean> = repository.isFavoriteUser(id).asLiveData()
+
+    fun updateFavoriteUser(userDetail: UserDetail, isFavoriteUser: Boolean) =
+        viewModelScope.launch {
+            repository.updateFavoriteUser(userDetail, isFavoriteUser)
+        }
 }

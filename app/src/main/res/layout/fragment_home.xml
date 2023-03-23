@@ -26,12 +26,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
+        android:visibility="gone"
         tools:visibility="gone" />
 
     <include
         android:id="@+id/notFoundPlaceholder"
-        tools:visibility="gone"
-        layout="@layout/not_found_placeholder" />
+        layout="@layout/not_found_placeholder"
+        tools:visibility="gone" />
 
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
@@ -52,7 +53,8 @@
         android:layout_height="match_parent"
         android:hint="@string/searchbar_hint"
         android:importantForAccessibility="no"
-        app:layout_anchor="@id/searchBar"/>
+        app:layout_anchor="@id/searchBar" />
+
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
 

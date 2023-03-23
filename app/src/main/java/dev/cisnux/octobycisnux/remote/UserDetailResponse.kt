@@ -1,4 +1,4 @@
-package dev.cisnux.octobycisnux.network
+package dev.cisnux.octobycisnux.remote
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
@@ -6,6 +6,9 @@ import dev.cisnux.octobycisnux.domain.UserDetail
 
 @JsonClass(generateAdapter = true)
 data class UserDetailResponse(
+    @Json(name = "id")
+    val id: Int,
+
     @Json(name = "login")
     val login: String,
 
@@ -26,10 +29,11 @@ data class UserDetailResponse(
 )
 
 fun UserDetailResponse.asUserDetail() = UserDetail(
+    id = id,
     username = login,
     name = name,
-    followers = followers,
-    following = following,
+    totalFollowers = followers,
+    totalFollowing = following,
     profilePict = avatarUrl,
     location = location,
 )

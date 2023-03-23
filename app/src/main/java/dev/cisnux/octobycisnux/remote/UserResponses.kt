@@ -1,31 +1,30 @@
-package dev.cisnux.octobycisnux.network
+package dev.cisnux.octobycisnux.remote
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 import dev.cisnux.octobycisnux.domain.User
 
 @JsonClass(generateAdapter = true)
-data class UsersResponse(
-
+data class UserResponses(
     @Json(name = "items")
     val items: List<UserResponse>
 )
 
 data class UserResponse(
+    @Json(name = "id")
+    val id: Int,
+
     @Json(name = "login")
     val login: String,
 
     @Json(name = "avatar_url")
     val avatarUrl: String,
-
-    @Json(name = "id")
-    val id: Int,
 )
 
-fun List<UserResponse>.asUsers(): List<User> = map {
+fun List<UserResponse>.asUsers(): List<User> = map { (id, login, avatarUrl) ->
     User(
-        id = it.id,
-        username = it.login,
-        profilePict = it.avatarUrl
+        id = id,
+        username = login,
+        profilePict = avatarUrl
     )
 }

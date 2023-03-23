@@ -1,3 +1,3 @@
 package dev.cisnux.octobycisnux.utils
 
-typealias OnItemClickListener<T> = (value: T) -> Unit
+typealias OnItemClickListener = (id: Int, username: String) -> Unit

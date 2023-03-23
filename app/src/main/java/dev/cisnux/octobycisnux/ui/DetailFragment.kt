@@ -9,30 +9,36 @@ import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.navigation.findNavController
+import androidx.navigation.fragment.findNavController
 import coil.load
 import com.google.android.material.tabs.TabLayoutMediator
+import dagger.hilt.android.AndroidEntryPoint
 import dev.cisnux.octobycisnux.R
 import dev.cisnux.octobycisnux.databinding.FragmentDetailBinding
-import dev.cisnux.octobycisnux.utils.ApplicationNetworkStatus
+import dev.cisnux.octobycisnux.domain.UserDetail
+import dev.cisnux.octobycisnux.ui.adapters.SectionsPagerAdapter
+import dev.cisnux.octobycisnux.utils.ApplicationStates
+import dev.cisnux.octobycisnux.utils.SingleEvent
 import dev.cisnux.octobycisnux.viewmodels.DetailViewModel
 
+@AndroidEntryPoint
 class DetailFragment : Fragment() {
     private var _binding: FragmentDetailBinding? = null
     private val binding: FragmentDetailBinding get() = _binding!!
     private val viewModel: DetailViewModel by viewModels()
-    private lateinit var argUsername: String
+    private var username: String? = null
+    private lateinit var adapter: SectionsPagerAdapter
+    private var userId: Int? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         // get username argument
-        arguments?.let {
-            argUsername = DetailFragmentArgs.fromBundle(it).username
-        }
-        // to avoid making multiple API calls when changing orientation
-        if (savedInstanceState == null) {
-            viewModel.getUserByUsername(argUsername)
-        }
+        username = DetailFragmentArgs.fromBundle(arguments as Bundle).username
+        userId = DetailFragmentArgs.fromBundle(arguments as Bundle).id
+
+        // to avoid multiple API calls
+        if (savedInstanceState == null)
+            username?.let(viewModel::getUserDetailByUsername)
     }
 
     override fun onCreateView(
@@ -45,53 +51,71 @@ class DetailFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        subscribeProgressRequest()
-        setUserProfile()
+        viewModel.userDetailStates.observe(viewLifecycleOwner, ::updateUserDetailStates)
+        viewModel.userDetail.observe(viewLifecycleOwner, ::setUserProfile)
+        viewModel.userDetail.observe(viewLifecycleOwner) { userDetail ->
+            viewModel.isFavoriteUser(userDetail.id)
+                .observe(viewLifecycleOwner, ::setFabFavoriteIcon)
+        }
+        viewModel.userDetail.observe(viewLifecycleOwner) { userDetail ->
+            viewModel.isFavoriteUser(userDetail.id).observe(viewLifecycleOwner) { isFavoriteUser ->
+                binding.fabFavoriteUser.setOnClickListener {
+                    viewModel.updateFavoriteUser(
+                        userDetail,
+                        !isFavoriteUser
+                    )
+                }
+            }
+        }
         // set up a view pager and tab layout
         with(binding) {
-            topBar.setNavigationOnClickListener {
-                view.findNavController().navigateUp()
+            toolbar.setNavigationOnClickListener {
+                findNavController().navigateUp()
             }
-            val sectionsPagerAdapter =
-                SectionsPagerAdapter(requireActivity() as AppCompatActivity).apply {
-                    username = argUsername
-                }
-            viewPager.adapter = sectionsPagerAdapter
+            adapter = SectionsPagerAdapter(
+                requireActivity() as AppCompatActivity,
+                this@DetailFragment.username
+            )
+            viewPager.adapter = adapter
             TabLayoutMediator(tabs, viewPager) { tab, position ->
                 tab.text = resources.getString(TAB_TITLES[position])
             }.attach()
         }
     }
 
-    private fun setUserProfile(): Unit = viewModel.user.observe(viewLifecycleOwner) { userDetail ->
+    private fun setUserProfile(userDetail: UserDetail) =
         with(binding) {
             username.text = userDetail.username
-            topBar.title = userDetail.name
-            followers.text = userDetail.followers.toString()
-            following.text = userDetail.following.toString()
+            toolbar.title = userDetail.name
+            followers.text = userDetail.totalFollowers.toString()
+            following.text = userDetail.totalFollowing.toString()
             location.text = userDetail.location
             profilePict.load(userDetail.profilePict)
         }
-    }
 
-
-    private fun subscribeProgressRequest() {
-        viewModel.applicationNetworkStatus.observe(viewLifecycleOwner) {
-            val networkStatus = it.content
-            binding.progressBar.visibility = when (networkStatus) {
-                is ApplicationNetworkStatus.Failed -> {
-                    // single event for Toast
-                    it.getContentIfNotHandled()?.let { _ ->
-                        Toast.makeText(requireActivity(), networkStatus.message, Toast.LENGTH_SHORT)
-                            .show()
-                    }
-                    View.VISIBLE
-                }
-                is ApplicationNetworkStatus.Success -> View.GONE
-                else -> View.VISIBLE
+    private fun updateUserDetailStates(singleEvent: SingleEvent<ApplicationStates>) =
+        when (val applicationStates = singleEvent.content) {
+            is ApplicationStates.Failed -> {
+                Toast.makeText(
+                    requireActivity(),
+                    applicationStates.error.message,
+                    Toast.LENGTH_SHORT
+                )
+                    .show()
+                binding.progressBar.visibility = View.VISIBLE
+            }
+            is ApplicationStates.Loading -> binding.progressBar.visibility = View.VISIBLE
+            is ApplicationStates.Success -> {
+                binding.progressBar.visibility = View.GONE
             }
         }
-    }
+
+    private fun setFabFavoriteIcon(isFavoriteUser: Boolean) =
+        binding.fabFavoriteUser.setImageResource(
+            if (isFavoriteUser)
+                R.drawable.ic_favorite_24dp
+            else R.drawable.ic_favorite_border_24dp
+        )
 
     override fun onDestroy() {
         super.onDestroy()

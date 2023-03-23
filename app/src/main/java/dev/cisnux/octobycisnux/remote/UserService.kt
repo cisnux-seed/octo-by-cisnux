@@ -1,4 +1,4 @@
-package dev.cisnux.octobycisnux.network
+package dev.cisnux.octobycisnux.remote
 
 import retrofit2.http.GET
 import retrofit2.http.Path
@@ -14,7 +14,7 @@ interface UserService {
     suspend fun getUsersByUsername(
         @Query("q") username: String,
         @Query("per_page") perPage: Int
-    ): UsersResponse
+    ): UserResponses
 
     @GET("/users/{username}")
     suspend fun getUserByUsername(
