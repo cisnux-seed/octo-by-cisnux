@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import coil.load
+import coil.request.CachePolicy
 import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
 import dev.cisnux.octobycisnux.R
@@ -90,7 +91,13 @@ class DetailFragment : Fragment() {
             followers.text = userDetail.totalFollowers.toString()
             following.text = userDetail.totalFollowing.toString()
             location.text = userDetail.location
-            profilePict.load(userDetail.profilePict)
+            profilePict.load(userDetail.profilePict) {
+                placeholder(R.drawable.avatar_loading_placeholder)
+                crossfade(true)
+                networkCachePolicy(CachePolicy.ENABLED)
+                diskCachePolicy(CachePolicy.ENABLED)
+                memoryCachePolicy(CachePolicy.ENABLED)
+            }
         }
 
     private fun updateUserDetailStates(singleEvent: SingleEvent<ApplicationStates>) =

@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import coil.request.CachePolicy
+import dev.cisnux.octobycisnux.R
 import dev.cisnux.octobycisnux.databinding.ListTileItemBinding
 import dev.cisnux.octobycisnux.domain.User
 import dev.cisnux.octobycisnux.utils.OnItemClickListener
@@ -18,11 +19,12 @@ class UsersAdapter(private inline val onItemClickListener: OnItemClickListener) 
         RecyclerView.ViewHolder(binding.root) {
         fun bind(user: User) = with(binding) {
             username.text = user.username
-            userPict.load(user.profilePict) {
+            binding.userPict.load(user.profilePict) {
+                placeholder(R.drawable.avatar_loading_placeholder)
+                crossfade(true)
                 networkCachePolicy(CachePolicy.ENABLED)
                 diskCachePolicy(CachePolicy.ENABLED)
                 memoryCachePolicy(CachePolicy.ENABLED)
-                crossfade(true)
             }
         }
     }

@@ -147,8 +147,9 @@ class UserRepository @Inject constructor(
 
     companion object {
         private val NETWORK_ERROR = mapOf(
+            401 to ApplicationErrors.AuthenticationError(),
             404 to ApplicationErrors.NotFoundError(),
-            500 to ApplicationErrors.ServerError()
+            500 to ApplicationErrors.ServerError(),
         )
     }
 }

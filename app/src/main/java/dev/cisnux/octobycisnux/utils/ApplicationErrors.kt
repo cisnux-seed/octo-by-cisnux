@@ -12,4 +12,8 @@ sealed class ApplicationErrors(val message: String) {
     class ServerError(
         message: String = "the server undergoing maintenance",
     ) : ApplicationErrors(message)
+
+    class AuthenticationError(
+        message: String = "your credentials are invalid",
+    ) : ApplicationErrors(message)
 }
