@@ -11,7 +11,7 @@ android {
     compileSdk 33
 
     defaultConfig {
-        buildConfigField("String", "GITHUB_TOKEN", '"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"')
+        buildConfigField("String", "GITHUB_TOKEN", '"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2JECj"')
         applicationId "dev.cisnux.octobycisnux"
         minSdk 21
         targetSdk 33
