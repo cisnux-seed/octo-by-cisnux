@@ -57,9 +57,9 @@ class FollowersFollowingFragment : Fragment() {
             ::updateFollowerFollowingStates
         )
         // setup the UsersAdapter
-        adapter = UsersAdapter { id, username ->
+        adapter = UsersAdapter { username ->
             val toDetailFragment =
-                DetailFragmentDirections.actionDetailFragmentSelf(id, username)
+                DetailFragmentDirections.actionDetailFragmentSelf(username)
             findNavController().navigate(toDetailFragment)
         }
         viewModel.followersFollowing.observe(viewLifecycleOwner, adapter::submitList)

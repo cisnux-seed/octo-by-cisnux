@@ -1,4 +1,4 @@
-package dev.cisnux.octobycisnux
+package dev.cisnux.octobycisnux.ui
 
 import android.annotation.SuppressLint
 import android.content.Intent
@@ -9,7 +9,6 @@ import androidx.appcompat.app.AppCompatDelegate
 import androidx.lifecycle.lifecycleScope
 import dagger.hilt.android.AndroidEntryPoint
 import dev.cisnux.octobycisnux.databinding.ActivitySplashBinding
-import dev.cisnux.octobycisnux.ui.MainActivity
 import dev.cisnux.octobycisnux.viewmodels.SettingsViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch

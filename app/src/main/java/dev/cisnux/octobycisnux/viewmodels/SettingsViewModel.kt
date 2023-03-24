@@ -10,7 +10,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class SettingsViewModel @Inject constructor(private val repository: UserRepository) : ViewModel() {
+internal class SettingsViewModel @Inject constructor(private val repository: UserRepository) : ViewModel() {
     val userThemePreferences: LiveData<Boolean> get() = repository.themeSetting.asLiveData()
 
     fun saveThemePreferences(isDarkMode: Boolean) = viewModelScope.launch {

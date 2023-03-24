@@ -7,8 +7,10 @@ import android.view.View
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
+import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
+import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import dagger.hilt.android.AndroidEntryPoint
@@ -22,6 +24,8 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private val settingsViewModel: SettingsViewModel by viewModels()
     private val homeViewModel: HomeViewModel by viewModels()
+    private lateinit var navController: NavController
+    private lateinit var appBarConfiguration: AppBarConfiguration
 
     @SuppressLint("SourceLockedOrientationActivity")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -32,13 +36,14 @@ class MainActivity : AppCompatActivity() {
         supportActionBar?.hide()
 
         val navFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment_activity_main) as NavHostFragment
-        val navController = navFragment.navController
-        binding.navView.setupWithNavController(navController)
-        val appBarConfiguration = AppBarConfiguration(
+        val bottomNavigationView = binding.navView
+        navController = navFragment.navController
+        bottomNavigationView.setupWithNavController(navController)
+        appBarConfiguration = AppBarConfiguration(
             setOf(
                 R.id.homeFragment,
                 R.id.settingsFragment,
-                R.id.favoriteUserFragment,
+                R.id.favoriteUsersFragment,
             )
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
@@ -46,10 +51,6 @@ class MainActivity : AppCompatActivity() {
         homeViewModel.hasFocus.observe(this, ::showBottomNavigation)
         navFragment.navController.addOnDestinationChangedListener { _, destination, _ ->
             when (destination.id) {
-                R.id.splashFragment -> {
-                    requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_FULL_SENSOR
-                    binding.navView.visibility = View.GONE
-                }
                 R.id.detailFragment -> {
                     requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
                     binding.navView.visibility = View.VISIBLE
@@ -60,6 +61,10 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }
+    }
+
+    override fun onSupportNavigateUp(): Boolean {
+        return navController.navigateUp(appBarConfiguration)
     }
 
     private fun showBottomNavigation(hasFocus: Boolean) {

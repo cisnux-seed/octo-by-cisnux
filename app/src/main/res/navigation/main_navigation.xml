@@ -1,56 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<navigation xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    app:startDestination="@id/splashFragment">
+<navigation xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:startDestination="@id/home">
 
-    <fragment
-        android:id="@+id/homeFragment"
-        android:name="dev.cisnux.octobycisnux.ui.HomeFragment"
-        android:label="fragment_home"
-        tools:layout="@layout/fragment_home">
-        <action
-            android:id="@+id/action_homeFragment_to_detailFragment"
-            app:destination="@id/detailFragment" />
-    </fragment>
-    <fragment
-        android:id="@+id/detailFragment"
-        android:name="dev.cisnux.octobycisnux.ui.DetailFragment"
-        android:label="fragment_detail"
-        tools:layout="@layout/fragment_detail">
-        <argument
-            android:name="id"
-            app:argType="integer" />
-        <argument
-            android:name="username"
-            app:argType="string" />
-        <action
-            android:id="@+id/action_detailFragment_self"
-            app:destination="@id/detailFragment" />
-    </fragment>
-    <fragment
-        android:id="@+id/splashFragment"
-        android:name="dev.cisnux.octobycisnux.ui.SplashFragment"
-        android:label="fragment_splash"
-        tools:layout="@layout/fragment_splash">
-        <action
-            android:id="@+id/action_splashFragment_to_homeFragment"
-            app:destination="@id/homeFragment"
-            app:popUpTo="@id/splashFragment"
-            app:popUpToInclusive="true" />
-    </fragment>
-    <fragment
-        android:id="@+id/settingsFragment"
-        android:name="dev.cisnux.octobycisnux.ui.SettingsFragment"
-        android:label="fragment_settings"
-        tools:layout="@layout/fragment_settings" />
-    <fragment
-        android:id="@+id/favoriteUserFragment"
-        android:name="dev.cisnux.octobycisnux.ui.FavoriteUserFragment"
-        android:label="fragment_favorite_user"
-        tools:layout="@layout/fragment_favorite_user" >
-        <action
-            android:id="@+id/action_favoriteUserFragment_to_detailFragment"
-            app:destination="@id/detailFragment" />
-    </fragment>
+    <include app:graph="@navigation/home" />
+    <include app:graph="@navigation/favorite_users" />
+    <include app:graph="@navigation/settings" />
 </navigation>

@@ -9,6 +9,7 @@
     <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/toolbar"
         android:layout_width="0dp"
+        android:layout_marginHorizontal="4dp"
         android:layout_height="wrap_content"
         android:minHeight="?attr/actionBarSize"
         app:layout_constraintEnd_toEndOf="parent"
@@ -17,7 +18,7 @@
         app:navigationIcon="@drawable/ic_arrow_back_24dp"
         app:navigationIconTint="?attr/colorOnBackground"
         app:titleTextColor="?attr/colorOnBackground"
-        tools:title="John Doe" />
+        tools:title="John Doe"/>
 
     <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/profilePict"

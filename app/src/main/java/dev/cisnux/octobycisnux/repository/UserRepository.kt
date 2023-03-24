@@ -21,7 +21,7 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class UserRepository @Inject constructor(
+internal class UserRepository @Inject constructor(
     private val userService: UserService,
     private val settingPreferences: SettingPreferences,
     private val userDao: UserDao
@@ -37,17 +37,14 @@ class UserRepository @Inject constructor(
 
     suspend fun updateFavoriteUser(userDetail: UserDetail, isFavorite: Boolean) =
         withContext(Dispatchers.IO) {
-            val isUserExist = userDao.isUserExist(userDetail.id)
-            if (!isUserExist)
-                userDao.insertUser(
-                    UserEntity(
-                        id = userDetail.id,
-                        login = userDetail.username,
-                        avatarUrl = userDetail.profilePict,
-                        isFavorite = isFavorite,
-                    )
+            userDao.insertUser(
+                UserEntity(
+                    id = userDetail.id,
+                    login = userDetail.username,
+                    avatarUrl = userDetail.profilePict,
+                    isFavorite = isFavorite,
                 )
-            else userDao.updateUser(userDetail.id, isFavorite)
+            )
         }
 
 

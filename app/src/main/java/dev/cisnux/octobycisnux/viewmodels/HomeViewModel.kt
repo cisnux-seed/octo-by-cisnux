@@ -11,7 +11,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class HomeViewModel @Inject constructor(private val repository: UserRepository) : ViewModel() {
+internal class HomeViewModel @Inject constructor(private val repository: UserRepository) : ViewModel() {
     private val _users = MediatorLiveData<List<User>>()
     val users: LiveData<List<User>> get() = _users
     private val _usersStates = MutableLiveData<SingleEvent<ApplicationStates>>()

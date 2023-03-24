@@ -1,7 +1,11 @@
 package dev.cisnux.octobycisnux.ui
 
+import android.content.Intent
+import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
@@ -29,13 +33,11 @@ class DetailFragment : Fragment() {
     private val viewModel: DetailViewModel by viewModels()
     private var username: String? = null
     private lateinit var adapter: SectionsPagerAdapter
-    private var userId: Int? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         // get username argument
         username = DetailFragmentArgs.fromBundle(arguments as Bundle).username
-        userId = DetailFragmentArgs.fromBundle(arguments as Bundle).id
 
         // to avoid multiple API calls
         if (savedInstanceState == null)
@@ -70,9 +72,11 @@ class DetailFragment : Fragment() {
         }
         // set up a view pager and tab layout
         with(binding) {
+            toolbar.inflateMenu(R.menu.detail_option_menu)
             toolbar.setNavigationOnClickListener {
                 findNavController().navigateUp()
             }
+            toolbar.setOnMenuItemClickListener(::setOptionMenu)
             adapter = SectionsPagerAdapter(
                 requireActivity() as AppCompatActivity,
                 this@DetailFragment.username
@@ -99,6 +103,35 @@ class DetailFragment : Fragment() {
                 memoryCachePolicy(CachePolicy.ENABLED)
             }
         }
+
+    @Suppress("DEPRECATION")
+    private fun setOptionMenu(menu: MenuItem) = when (menu.itemId) {
+        R.id.action_share -> {
+            val intent = Intent().apply {
+                type = "text/plain"
+                action = Intent.ACTION_SEND
+                putExtra(
+                    Intent.EXTRA_TEXT,
+                    "$USER_DETAIL_URL/$username"
+                )
+                flags = Intent.FLAG_GRANT_READ_URI_PERMISSION
+            }
+            startActivity(
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                    Intent.createChooser(intent, null)
+                } else {
+                    intent
+                        .also {
+                            requireActivity().packageManager?.resolveActivity(
+                                intent,
+                                PackageManager.MATCH_DEFAULT_ONLY
+                            )
+                        }
+                })
+            true
+        }
+        else -> false
+    }
 
     private fun updateUserDetailStates(singleEvent: SingleEvent<ApplicationStates>) =
         when (val applicationStates = singleEvent.content) {
@@ -130,6 +163,8 @@ class DetailFragment : Fragment() {
     }
 
     companion object {
+        private const val USER_DETAIL_URL = "https://api.github.com/users"
+
         @StringRes
         private val TAB_TITLES = intArrayOf(
             R.string.tab_text_1,

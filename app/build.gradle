@@ -11,7 +11,7 @@ android {
     compileSdk 33
 
     defaultConfig {
-        buildConfigField("String", "GITHUB_TOKEN", '"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"')
+        buildConfigField("String", "GITHUB_TOKEN", '"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"')
         applicationId "dev.cisnux.octobycisnux"
         minSdk 21
         targetSdk 33
@@ -58,10 +58,20 @@ dependencies {
     // view model and live data
     implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.0'
     implementation "androidx.lifecycle:lifecycle-livedata-ktx:2.6.0"
+    implementation 'androidx.test.ext:junit-ktx:1.1.5'
     // testing
     testImplementation 'junit:junit:4.13.2'
+    testImplementation 'org.mockito:mockito-core:2.24.5'
+    testImplementation "com.squareup.okhttp3:mockwebserver:4.10.0"
+    debugImplementation "androidx.fragment:fragment-testing:1.5.5"
+    kaptAndroidTest 'com.google.dagger:hilt-android-compiler:2.44'
+    androidTestImplementation 'androidx.test:core-ktx:1.5.0'
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
+    androidTestImplementation "androidx.navigation:navigation-testing:2.5.3"
+    androidTestImplementation "com.google.dagger:hilt-android-testing:2.44"
+    //noinspection GradleDependency
+    androidTestImplementation "androidx.test.espresso:espresso-contrib:3.3.0"
     // retrofit
     implementation "com.squareup.okhttp3:logging-interceptor:4.9.0"
     implementation 'com.squareup.retrofit2:retrofit:2.9.0'

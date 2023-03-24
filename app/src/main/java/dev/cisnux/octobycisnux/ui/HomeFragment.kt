@@ -36,9 +36,9 @@ class HomeFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         viewModel.usersStates.observe(viewLifecycleOwner, ::updateUsersStates)
         // set up a adapter
-        adapter = UsersAdapter { id, username ->
+        adapter = UsersAdapter { username ->
             val toDetailFragment =
-                HomeFragmentDirections.actionHomeFragmentToDetailFragment(id, username)
+                HomeFragmentDirections.actionHomeFragmentToDetailFragment(username)
             findNavController().navigate(toDetailFragment)
         }
         viewModel.users.observe(viewLifecycleOwner, adapter::submitList)

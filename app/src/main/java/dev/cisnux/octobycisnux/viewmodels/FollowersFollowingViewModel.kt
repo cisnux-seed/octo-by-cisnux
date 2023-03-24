@@ -13,7 +13,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class FollowersFollowingViewModel @Inject constructor(private val repository: UserRepository) :
+internal class FollowersFollowingViewModel @Inject constructor(private val repository: UserRepository) :
     ViewModel() {
     private val _followersFollowing = MutableLiveData<List<User>>()
     val followersFollowing: LiveData<List<User>> get() = _followersFollowing

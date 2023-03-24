@@ -18,12 +18,6 @@ interface UserDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertUser(user: UserEntity)
 
-    @Query("UPDATE user SET is_favorite = :isFavorite WHERE id = :id")
-    suspend fun updateUser(id: Int, isFavorite: Boolean)
-
     @Query("SELECT EXISTS (SELECT * FROM user WHERE id = :id AND is_favorite = 1)")
     fun isFavoriteUser(id: Int): Flow<Boolean>
-
-    @Query("SELECT EXISTS (SELECT * FROM user WHERE id = :id)")
-    fun isUserExist(id: Int): Boolean
 }

@@ -9,6 +9,6 @@ import dev.cisnux.octobycisnux.repository.UserRepository
 import javax.inject.Inject
 
 @HiltViewModel
-class FavoriteUserViewModel @Inject constructor(repository: UserRepository) : ViewModel() {
+internal class FavoriteUserViewModel @Inject constructor(repository: UserRepository) : ViewModel() {
     val favoriteUsers: LiveData<List<User>> = repository.favoriteUsers.asLiveData()
 }

@@ -10,7 +10,7 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class SettingPreferences @Inject constructor(private val dataStore: DataStore<Preferences>) {
+internal class SettingPreferences @Inject constructor(private val dataStore: DataStore<Preferences>) {
     fun getThemeSetting(): Flow<Boolean> =
         dataStore.data.map { preference ->
             preference[THEME_KEY] ?: false

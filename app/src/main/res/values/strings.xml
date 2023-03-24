@@ -20,4 +20,5 @@
     <string name="title_theme">Adjust App Theme</string>
     <string name="add_to_favorite_users">add to favorite users</string>
     <string name="favorite_users_title">Favorite Users</string>
+    <string name="share">Share</string>
 </resources>

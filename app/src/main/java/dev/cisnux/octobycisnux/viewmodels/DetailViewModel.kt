@@ -10,7 +10,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class DetailViewModel @Inject constructor(private val repository: UserRepository) : ViewModel() {
+internal class DetailViewModel @Inject constructor(private val repository: UserRepository) : ViewModel() {
     private val _userDetail = MutableLiveData<UserDetail>()
     val userDetail: LiveData<UserDetail> get() = _userDetail
     private val _userDetailStates = MutableLiveData<SingleEvent<ApplicationStates>>()

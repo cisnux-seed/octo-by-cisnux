@@ -37,7 +37,7 @@ class UsersAdapter(private inline val onItemClickListener: OnItemClickListener) 
         val user = getItem(position)
         holder.bind(user)
         holder.itemView.setOnClickListener {
-            onItemClickListener(user.id, user.username)
+            onItemClickListener(user.username)
         }
     }
 

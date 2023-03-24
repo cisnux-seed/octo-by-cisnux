@@ -32,12 +32,9 @@ class FavoriteUserFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         // setup the UsersAdapter
-        adapter = UsersAdapter { id, username ->
+        adapter = UsersAdapter { username ->
             val toDetailFragment =
-                FavoriteUserFragmentDirections.actionFavoriteUserFragmentToDetailFragment(
-                    id,
-                    username
-                )
+                FavoriteUserFragmentDirections.actionFavoriteUserFragmentToDetailFragment(username)
             findNavController().navigate(toDetailFragment)
         }
         viewModel.favoriteUsers.observe(viewLifecycleOwner, adapter::submitList)
